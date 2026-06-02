@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeIQ Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" href="#candidate" data-view-target="candidateView">
+            <span class="brand-mark">RI</span>
+            <span>
+                <strong>ResumeIQ</strong>
+                <small>Analyzer</small>
+            </span>
+        </a>
+
+        <nav class="view-tabs" aria-label="Main views">
+            <button class="tab-button" type="button" data-view-target="authView">
+                <i data-lucide="user-round"></i>
+                Account
+            </button>
+            <button class="tab-button active" type="button" data-view-target="candidateView">
+                <i data-lucide="upload-cloud"></i>
+                Apply
+            </button>
+            <button class="tab-button" type="button" data-view-target="scoreView">
+                <i data-lucide="gauge"></i>
+                Score
+            </button>
+            <button class="tab-button" type="button" data-view-target="compareView">
+                <i data-lucide="shuffle"></i>
+                Compare
+            </button>
+            <button class="tab-button" type="button" data-view-target="dashboardView">
+                <i data-lucide="bar-chart-3"></i>
+                Dashboard
+            </button>
+            <button class="tab-button" type="button" data-view-target="adminView">
+                <i data-lucide="layout-dashboard"></i>
+                Admin
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="view-section" id="authView">
+            <div class="auth-layout">
+                <aside class="auth-visual reveal-up">
+                    <div class="auth-visual-content">
+                        <p class="eyebrow">User access</p>
+                        <h1>Build your candidate profile before the resume scan starts.</h1>
+                        <p>Register or login as a user so the admin can track who joined the ResumeIQ Analyzer portal.</p>
+                        <div class="auth-proof-grid">
+                            <span><strong>Skill scan</strong>Resume match scoring</span>
+                            <span><strong>Job fit</strong>Compare roles instantly</span>
+                            <span><strong>Profile</strong>Registration visibility</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="account-stack">
+                    <div class="user-session-card surface is-hidden" id="userSessionPanel">
+                        <div class="session-avatar">
+                            <i data-lucide="badge-check"></i>
+                        </div>
+                        <div>
+                            <p class="eyebrow">Active user</p>
+                            <h2 id="userSessionName">Registered User</h2>
+                            <p><span id="userSessionUsername">@user</span> / <span id="userSessionEmail">No email</span></p>
+                        </div>
+                        <button class="secondary-action" type="button" id="userLogout">
+                            <i data-lucide="log-out"></i>
+                            Logout
+                        </button>
+                    </div>
+
+                    <div class="auth-card surface reveal-up delay-1">
+                        <div class="auth-mode-switch" aria-label="Account actions">
+                            <button class="active" type="button" data-auth-mode="register">
+                                <i data-lucide="user-plus"></i>
+                                Register
+                            </button>
+                            <button type="button" data-auth-mode="login">
+                                <i data-lucide="log-in"></i>
+                                Login
+                            </button>
+                        </div>
+
+                        <div class="auth-panel" id="registerPanel">
+                            <div class="form-header">
+                                <div>
+                                    <h2>Create User Account</h2>
+                                    <p>New users appear in the admin registered-users list.</p>
+                                </div>
+                                <span class="live-chip">
+                                    <span></span>
+                                    Profile
+                                </span>
+                            </div>
+
+                            <form id="userRegisterForm">
+                                <label>
+                                    Full name
+                                    <input type="text" name="fullName" placeholder="Your full name" required>
+                                </label>
+                                <div class="field-row two">
+                                    <label>
+                                        Email
+                                        <input type="email" name="email" placeholder="name@example.com" required>
+                                    </label>
+                                    <label>
+                                        Username
+                                        <input type="text" name="username" placeholder="resume_user" minlength="3" required>
+                                    </label>
+                                </div>
+                                <label>
+                                    Password
+                                    <input type="password" name="password" placeholder="Minimum 6 characters" minlength="6" required>
+                                </label>
+                                <button class="primary-action" type="submit">
+                                    <i data-lucide="user-plus"></i>
+                                    Register
+                                </button>
+                            </form>
+                            <p class="helper-text" id="userRegisterStatus">Create an account to track user registration in the admin panel.</p>
+                        </div>
+
+                        <div class="auth-panel is-hidden" id="loginPanel">
+                            <div class="form-header">
+                                <div>
+                                    <h2>User Login</h2>
+                                    <p>Login updates your last login time for admin review.</p>
+                                </div>
+                                <span class="live-chip">
+                                    <span></span>
+                                    Session
+                                </span>
+                            </div>
+
+                            <form id="userLoginForm">
+                                <label>
+                                    Username or email
+                                    <input type="text" name="username" placeholder="resume_user or name@example.com" required>
+                                </label>
+                                <label>
+                                    Password
+                                    <input type="password" name="password" placeholder="Your password" required>
+                                </label>
+                                <button class="primary-action" type="submit">
+                                    <i data-lucide="log-in"></i>
+                                    Login
+                                </button>
+                            </form>
+                            <p class="helper-text" id="userLoginStatus">Login using username or email.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="view-section active" id="candidateView">
+            <div class="section-heading">
+                <p class="eyebrow">Candidate workspace</p>
+                <h1>Upload resume, apply for a job, and get an instant match score.</h1>
+            </div>
+
+            <div class="candidate-grid">
+                <form class="application-form surface reveal-up" id="applicationForm">
+                    <div class="form-header">
+                        <div>
+                            <h2>Job Application</h2>
+                            <p>Accepted formats: PDF, DOC, DOCX and TXT.</p>
+                        </div>
+                        <span class="live-chip">
+                            <span></span>
+                            Live scoring
+                        </span>
+                    </div>
+
+                    <div class="field-row two">
+                        <label>
+                            Full name
+                            <input type="text" name="fullName" placeholder="Your full name" required>
+                        </label>
+                        <label>
+                            Email
+                            <input type="email" name="email" placeholder="name@example.com" required>
+                        </label>
+                    </div>
+
+                    <div class="field-row two">
+                        <label>
+                            Phone
+                            <input type="tel" name="phone" placeholder="+91 98765 43210" required>
+                        </label>
+                        <label>
+                            Experience years
+                            <input type="number" name="experienceYears" min="0" max="40" value="0" required>
+                        </label>
+                    </div>
+
+                    <label>
+                        Apply for job
+                        <select name="jobId" id="jobSelect" required>
+                            <option value="">Loading jobs...</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Skills
+                        <textarea name="skills" rows="3" placeholder="Java, Spring Boot, MySQL, REST API" required></textarea>
+                    </label>
+
+                    <label>
+                        Education
+                        <input type="text" name="education" placeholder="B.Tech Computer Science">
+                    </label>
+
+                    <label class="upload-zone" id="uploadZone">
+                        <input type="file" name="resume" accept=".pdf,.doc,.docx,.txt" required>
+                        <i data-lucide="file-up"></i>
+                        <span>
+                            <strong id="fileLabel">Drop resume here or choose file</strong>
+                            <small>Maximum size 10MB</small>
+                        </span>
+                    </label>
+
+                    <button class="primary-action" type="submit">
+                        <i data-lucide="send"></i>
+                        Submit Application
+                    </button>
+                </form>
+
+                <aside class="candidate-side reveal-up delay-1">
+                    <div class="ai-visual">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80" alt="AI resume analytics workspace">
+                        <div class="scan-line"></div>
+                        <div class="visual-caption">
+                            <span>Resume parser</span>
+                            <strong id="visualScore">0%</strong>
+                        </div>
+                    </div>
+
+                    <div class="stat-grid" id="statsGrid">
+                        <article class="stat-card">
+                            <span>Total</span>
+                            <strong id="totalApplications">0</strong>
+                        </article>
+                        <article class="stat-card">
+                            <span>Shortlisted</span>
+                            <strong id="shortlistedApplications">0</strong>
+                        </article>
+                        <article class="stat-card">
+                            <span>Average</span>
+                            <strong id="averageScore">0</strong>
+                        </article>
+                    </div>
+
+                    <div class="job-strip" id="jobStrip"></div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="view-section" id="scoreView">
+            <div class="score-layout">
+                <div class="surface score-panel reveal-up">
+                    <div class="form-header">
+                        <div>
+                            <p class="eyebrow">Score view</p>
+                            <h2>Application Result</h2>
+                        </div>
+                        <form class="score-search" id="scoreSearchForm">
+                            <input type="number" id="scoreApplicationId" min="1" placeholder="Application ID">
+                            <button type="submit" title="Find score">
+                                <i data-lucide="search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="score-card">
+                        <div class="score-ring" id="scoreRing" style="--score-angle: 0deg;">
+                            <span id="scoreValue">0</span>
+                        </div>
+                        <div class="score-copy">
+                            <span id="scoreLabel">No application selected</span>
+                            <h3 id="scoreName">Submit an application to see the score.</h3>
+                            <p id="scoreSummary">Your score will appear here with matched and missing job skills.</p>
+                        </div>
+                    </div>
+
+                    <div class="skill-columns">
+                        <section>
+                            <h3>Matched Skills</h3>
+                            <div class="pill-list" id="matchedSkills"></div>
+                        </section>
+                        <section>
+                            <h3>Missing Skills</h3>
+                            <div class="pill-list warning" id="missingSkills"></div>
+                        </section>
+                    </div>
+
+                    <section class="suggestion-panel">
+                        <h3>Resume Suggestions</h3>
+                        <ul id="resumeSuggestions">
+                            <li>Submit an application to receive resume improvement suggestions.</li>
+                        </ul>
+                    </section>
+                </div>
+
+                <div class="score-image reveal-up delay-1">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80" alt="Resume review on desk">
+                </div>
+            </div>
+        </section>
+
+        <section class="view-section" id="compareView">
+            <div class="section-heading">
+                <p class="eyebrow">Resume comparison</p>
+                <h1>Compare one resume against multiple jobs and rank the strongest role matches.</h1>
+            </div>
+
+            <div class="comparison-layout">
+                <form class="comparison-form surface reveal-up" id="comparisonForm">
+                    <div class="form-header">
+                        <div>
+                            <h2>Resume vs Jobs</h2>
+                            <p>Select multiple jobs, or leave all unchecked to compare against every role.</p>
+                        </div>
+                        <span class="live-chip">
+                            <span></span>
+                            Multi-role scoring
+                        </span>
+                    </div>
+
+                    <div class="field-row two">
+                        <label>
+                            Experience years
+                            <input type="number" name="experienceYears" min="0" max="40" value="0" required>
+                        </label>
+                        <label>
+                            Education
+                            <input type="text" name="education" placeholder="B.Tech Computer Science">
+                        </label>
+                    </div>
+
+                    <label>
+                        Skills
+                        <textarea name="skills" rows="3" placeholder="Java, Spring Boot, SQL, React" required></textarea>
+                    </label>
+
+                    <div class="job-picker">
+                        <div class="job-picker-heading">
+                            <strong>Jobs to compare</strong>
+                            <span>None selected means all jobs.</span>
+                        </div>
+                        <div class="job-check-grid" id="comparisonJobOptions"></div>
+                    </div>
+
+                    <label class="upload-zone">
+                        <input type="file" name="resume" accept=".pdf,.doc,.docx,.txt" required>
+                        <i data-lucide="files"></i>
+                        <span>
+                            <strong id="comparisonFileLabel">Drop resume here or choose file</strong>
+                            <small>The file is analyzed only for comparison.</small>
+                        </span>
+                    </label>
+
+                    <button class="primary-action" type="submit">
+                        <i data-lucide="scan-search"></i>
+                        Compare Resume
+                    </button>
+                </form>
+
+                <aside class="comparison-results surface reveal-up delay-1">
+                    <div class="form-header">
+                        <div>
+                            <p class="eyebrow">Ranked matches</p>
+                            <h2>Best Job Fit</h2>
+                        </div>
+                    </div>
+                    <div class="job-match-list" id="comparisonResults">
+                        <div class="empty-panel">Comparison results will appear here after analyzing a resume.</div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="view-section" id="dashboardView">
+            <div class="section-heading">
+                <p class="eyebrow">Recruiter dashboard</p>
+                <h1>Charts for application volume, skill demand, resume quality, and daily activity.</h1>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="stat-grid dashboard-stat-grid">
+                    <article class="stat-card">
+                        <span>Total Applications</span>
+                        <strong id="dashboardTotalApplications">0</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Average Resume Score</span>
+                        <strong id="dashboardAverageScore">0</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Daily Applications</span>
+                        <strong id="dashboardTodayApplications">0</strong>
+                    </article>
+                </div>
+
+                <section class="chart-card surface reveal-up">
+                    <div class="form-header">
+                        <div>
+                            <h2>Top Skills</h2>
+                            <p>Most repeated skills from submitted applications.</p>
+                        </div>
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <div class="bar-list" id="topSkillsChart">
+                        <div class="empty-panel">No skill data yet.</div>
+                    </div>
+                </section>
+
+                <section class="chart-card surface reveal-up delay-1">
+                    <div class="form-header">
+                        <div>
+                            <h2>Daily Applications</h2>
+                            <p>Application activity for the last 7 days.</p>
+                        </div>
+                        <i data-lucide="line-chart"></i>
+                    </div>
+                    <div class="daily-chart" id="dailyApplicationsChart"></div>
+                </section>
+            </div>
+        </section>
+
+        <section class="view-section" id="adminView">
+            <div class="admin-heading">
+                <div>
+                    <p class="eyebrow">Admin dashboard</p>
+                    <h1>Authorized review of candidates, resumes, scores, and improvement suggestions.</h1>
+                </div>
+                <div class="admin-session is-hidden" id="adminSession">
+                    <span>Signed in as <strong id="adminIdentity">admin</strong></span>
+                    <button class="secondary-action" type="button" id="adminLogout">
+                        <i data-lucide="log-out"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-login-card surface reveal-up" id="adminLoginPanel">
+                <div class="form-header">
+                    <div>
+                        <h2>Admin Login</h2>
+                        <p>Only authorized admins can view candidate details and resumes.</p>
+                    </div>
+                    <span class="live-chip">
+                        <span></span>
+                        Protected
+                    </span>
+                </div>
+
+                <form class="admin-login-form" id="adminLoginForm">
+                    <div class="field-row two">
+                        <label>
+                            Username
+                            <input type="text" name="username" placeholder="admin" autocomplete="username" required>
+                        </label>
+                        <label>
+                            Password
+                            <input type="password" name="password" placeholder="Admin password" autocomplete="current-password" required>
+                        </label>
+                    </div>
+                    <button class="primary-action" type="submit">
+                        <i data-lucide="shield-check"></i>
+                        Login to Admin
+                    </button>
+                </form>
+                <p class="helper-text" id="adminLoginStatus">Default local credentials are admin / admin123 unless changed in environment variables.</p>
+            </div>
+
+            <div class="admin-dashboard is-hidden" id="adminDashboard">
+                <div class="stat-grid admin-stat-grid">
+                    <article class="stat-card">
+                        <span>Total Candidates</span>
+                        <strong id="adminTotalApplications">0</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Shortlisted</span>
+                        <strong id="adminShortlistedApplications">0</strong>
+                    </article>
+                    <article class="stat-card">
+                        <span>Average Score</span>
+                        <strong id="adminAverageScore">0</strong>
+                    </article>
+                </div>
+
+                <section class="registered-users-panel surface">
+                    <div class="form-header">
+                        <div>
+                            <p class="eyebrow">Registered users</p>
+                            <h2>User account list</h2>
+                            <p id="registeredUsersSummary">Admin access required</p>
+                        </div>
+                        <button class="secondary-action" type="button" id="refreshAdminUsers">
+                            <i data-lucide="refresh-cw"></i>
+                            Refresh Users
+                        </button>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table users-table">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Registered</th>
+                                <th>Last Login</th>
+                                <th>Logins</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody id="registeredUsersTable">
+                            <tr>
+                                <td colspan="7" class="empty-state">Login to view registered users.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="ranking-panel surface" id="candidateRankingPanel">
+                    <div class="empty-panel">Ranked candidates will appear after applications are submitted.</div>
+                </div>
+
+                <div class="admin-controls admin-toolbar surface">
+                    <label>
+                        Sort
+                        <select id="adminSort">
+                            <option value="rank">Candidate rank</option>
+                            <option value="newest">Newest first</option>
+                            <option value="score">Highest score</option>
+                        </select>
+                    </label>
+                    <label class="check-control">
+                        <input type="checkbox" id="shortlistedOnly">
+                        <span>Shortlisted only</span>
+                    </label>
+                    <button class="secondary-action" type="button" id="refreshAdmin">
+                        <i data-lucide="refresh-cw"></i>
+                        Refresh
+                    </button>
+                </div>
+
+                <div class="admin-table-wrap surface reveal-up">
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>ID</th>
+                            <th>Candidate</th>
+                            <th>Role</th>
+                            <th>Performance</th>
+                            <th>Contact</th>
+                            <th>Resume</th>
+                            <th>Applied</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="applicationsTable">
+                        <tr>
+                            <td colspan="9" class="empty-state">Login to view applications.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+target/
+uploads/
+data/
+.m2repo/
+.idea/
+*.iml
+.env
+*.log
