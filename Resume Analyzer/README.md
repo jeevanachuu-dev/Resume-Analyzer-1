@@ -418,7 +418,7 @@ MySQL configuration is in:
 ```text
 src/main/resources/application-mysql.properties
 ```
-
+2
 The `run.ps1` script sets these environment variables when MySQL mode is used:
 
 ```text
